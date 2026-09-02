@@ -7,54 +7,132 @@
   "effort": "вечер",
   "lang": "ru",
   "seo": {
-    "title": "PLACEHOLDER title до 60 символов",
-    "description": "PLACEHOLDER description до 155 символов",
-    "keywords": []
+    "title": "Сколько стоит ваш час — калькулятор ставки фрилансера",
+    "description": "Посчитайте честную часовую ставку из дохода, расходов, отпуска и простоя между заказами. Без регистрации — расчёт целиком в браузере.",
+    "keywords": [
+      "калькулятор часовой ставки фрилансера",
+      "сколько стоит час работы",
+      "как посчитать почасовую ставку",
+      "часовая ставка фрилансера онлайн",
+      "калькулятор ставки для фрилансера"
+    ]
   },
   "inputs": [
     {
-      "id": "a",
-      "label": "PLACEHOLDER первое поле",
-      "short": "PLACEHOLDER короткое имя для строки «что если»",
-      "group": "PLACEHOLDER заголовок группы полей, или убрать поле group",
+      "id": "income",
+      "label": "Доход, который хотите получать на руки",
+      "short": "доход",
       "type": "number",
       "unit": "¤/мес",
       "min": 0,
-      "max": 100,
       "default": 0,
-      "required": true,
+      "required": true
+    },
+    {
+      "id": "expenses",
+      "label": "Расходы работы за месяц — софт, инструменты, аренда места (не жизненные траты)",
+      "short": "расходы работы",
+      "type": "number",
+      "unit": "¤/мес",
+      "min": 0,
+      "default": 0,
+      "required": false
+    },
+    {
+      "id": "hoursPerWeek",
+      "label": "Часов в неделю, которые реально работаете на клиентов",
+      "short": "часов в неделю",
+      "type": "integer",
+      "unit": "ч/нед",
+      "min": 1,
+      "max": 60,
+      "default": 40,
+      "required": false,
       "presets": [
-        {
-          "label": "PLACEHOLDER типичное значение",
-          "value": 0,
-          "note": "PLACEHOLDER откуда взято и за какой год"
-        }
+        { "label": "40 ч — полная занятость", "value": 40, "note": "D1: ТК РФ ст.91 и международная норма 5×8, отправная точка" },
+        { "label": "20 ч — неполная занятость", "value": 20, "note": "половина полной занятости — подработка или частичный фриланс" }
+      ]
+    },
+    {
+      "id": "vacationDays",
+      "label": "Дней отпуска в году",
+      "short": "дней отпуска",
+      "type": "integer",
+      "unit": "дней/год",
+      "min": 0,
+      "max": 60,
+      "default": 20,
+      "required": false,
+      "presets": [
+        { "label": "15 дней — минимум МОТ", "value": 15, "note": "D3: Конвенция МОТ №132, минимум 3 рабочие недели" },
+        { "label": "20 дней — минимум ЕС/РФ", "value": 20, "note": "D3: Директива 2003/88/EC и ТК РФ ст.115, отправная точка по умолчанию" }
+      ]
+    },
+    {
+      "id": "downtimePercent",
+      "label": "Доля времени без оплаченной работы за год — простой между заказами, поиск клиентов, админка (не отпуск)",
+      "short": "простой",
+      "type": "integer",
+      "unit": "%",
+      "min": 0,
+      "max": 90,
+      "default": 40,
+      "required": false,
+      "presets": [
+        { "label": "30% — заказы стабильны", "value": 30, "note": "D4: нижняя граница диапазона отраслевых обзоров 2024–2025, не подтверждено для СНГ (DATA.md X5)" },
+        { "label": "40% — типично", "value": 40, "note": "D4: середина диапазона 30–50%, отправная точка по умолчанию" },
+        { "label": "50% — поток нерегулярный", "value": 50, "note": "D4: верхняя граница диапазона отраслевых обзоров 2024–2025" }
       ]
     }
   ],
   "outputs": [
     {
-      "id": "value",
-      "label": "PLACEHOLDER что показываем крупно",
-      "unit": "",
+      "id": "hourlyRate",
+      "label": "Ваш час стоит",
+      "unit": "¤/ч",
       "role": "hero"
+    },
+    {
+      "id": "payableHoursPerMonth",
+      "label": "Оплачиваемых часов в месяц — после отпуска и простоя",
+      "unit": "ч/мес",
+      "role": "detail"
+    },
+    {
+      "id": "dailyRate",
+      "label": "За рабочий день (8 часов)",
+      "unit": "¤/день",
+      "role": "detail"
     }
   ],
   "cases": [
     {
-      "name": "PLACEHOLDER случай из жизни",
-      "input": {
-        "a": 2
-      },
-      "expect": {
-        "value": 2
-      }
+      "name": "Разработчик из Москвы отвечает заказчику в чате",
+      "input": { "income": 150000, "expenses": 20000, "hoursPerWeek": 40, "vacationDays": 20, "downtimePercent": 40 },
+      "expect": { "hourlyRate": 1770.83, "payableHoursPerMonth": 96, "dailyRate": 14166.67 },
+      "tolerance": 0.05
+    },
+    {
+      "name": "Разработчик из Киева пересматривает контракт в злотых",
+      "input": { "income": 18000, "expenses": 3000, "hoursPerWeek": 40, "vacationDays": 20, "downtimePercent": 30 },
+      "expect": { "hourlyRate": 187.5, "payableHoursPerMonth": 112, "dailyRate": 1500 }
+    },
+    {
+      "name": "Маркетолог из Воронежа считает вечернюю подработку",
+      "input": { "income": 60000, "expenses": 5000, "hoursPerWeek": 10, "vacationDays": 0, "downtimePercent": 50 },
+      "expect": { "hourlyRate": 3000, "payableHoursPerMonth": 21.67, "dailyRate": 24000 },
+      "tolerance": 0.05
+    },
+    {
+      "name": "Пустая форма на одних дефолтах не ломается",
+      "input": { "income": 0, "expenses": 0, "hoursPerWeek": 40, "vacationDays": 20, "downtimePercent": 40 },
+      "expect": { "hourlyRate": 0, "payableHoursPerMonth": 96, "dailyRate": 0 }
     }
   ],
   "share": {
     "enabled": true,
     "card": true,
-    "template": "PLACEHOLDER текст для кнопки «поделиться»"
+    "template": "Мой честный час стоит дороже, чем я думал — посчитано без регистрации на «Сколько стоит ваш час»"
   },
   "links": {
     "repo": "",
