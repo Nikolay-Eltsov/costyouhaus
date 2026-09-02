@@ -1,0 +1,94 @@
+{
+  "slug": "costyouhaus",
+  "name": "Сколько стоит ваш час",
+  "tagline": "Из желаемого дохода, отпуска и расходов считает честную ставку. Больше не соглашаетесь на первую названную цифру.",
+  "category": "Калькуляторы и конвертеры",
+  "money": "донат",
+  "effort": "вечер",
+  "lang": "ru",
+  "seo": {
+    "title": "PLACEHOLDER title до 60 символов",
+    "description": "PLACEHOLDER description до 155 символов",
+    "keywords": []
+  },
+  "inputs": [
+    {
+      "id": "a",
+      "label": "PLACEHOLDER первое поле",
+      "short": "PLACEHOLDER короткое имя для строки «что если»",
+      "group": "PLACEHOLDER заголовок группы полей, или убрать поле group",
+      "type": "number",
+      "unit": "¤/мес",
+      "min": 0,
+      "max": 100,
+      "default": 0,
+      "required": true,
+      "presets": [
+        {
+          "label": "PLACEHOLDER типичное значение",
+          "value": 0,
+          "note": "PLACEHOLDER откуда взято и за какой год"
+        }
+      ]
+    }
+  ],
+  "outputs": [
+    {
+      "id": "value",
+      "label": "PLACEHOLDER что показываем крупно",
+      "unit": "",
+      "role": "hero"
+    }
+  ],
+  "cases": [
+    {
+      "name": "PLACEHOLDER случай из жизни",
+      "input": {
+        "a": 2
+      },
+      "expect": {
+        "value": 2
+      }
+    }
+  ],
+  "share": {
+    "enabled": true,
+    "card": true,
+    "template": "PLACEHOLDER текст для кнопки «поделиться»"
+  },
+  "links": {
+    "repo": "",
+    "web": "https://costyouhaus.devbrain.studio/"
+  },
+  "currency": {
+    "default": "EUR",
+    "options": [
+      {
+        "code": "EUR",
+        "sign": "€"
+      },
+      {
+        "code": "USD",
+        "sign": "$"
+      },
+      {
+        "code": "RUB",
+        "sign": "₽"
+      },
+      {
+        "code": "PLN",
+        "sign": "zł"
+      },
+      {
+        "code": "TRY",
+        "sign": "₺"
+      },
+      {
+        "code": "UAH",
+        "sign": "₴"
+      }
+    ]
+  },
+  "catalogNumber": 2,
+  "stack": "Одна страница"
+}

@@ -1,0 +1,17 @@
+name: gate
+on:
+  push:
+    branches: [main]
+  pull_request:
+jobs:
+  gate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Заказ закрыт
+        # Один гейт: замысел с тремя кругами критики, вердикт, и — при «брать» —
+        # заполненность продукта и сходимость расчёта с кейсами.
+        run: node tools/gate.mjs

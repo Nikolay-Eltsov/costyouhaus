@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PLACEHOLDER title до 60 символов</title>
+<meta name="description" content="PLACEHOLDER description до 155 символов">
+<link rel="canonical" href="https://costyouhaus.devbrain.studio/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="PLACEHOLDER title до 60 символов">
+<meta property="og:description" content="PLACEHOLDER description до 155 символов">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="./favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+
+<main class="wrap">
+  <h1>Сколько стоит ваш час</h1>
+  <p class="lead">Из желаемого дохода, отпуска и расходов считает честную ставку. Больше не соглашаетесь на первую названную цифру.</p>
+
+  <output id="out" class="result" aria-live="polite"></output>
+
+  <!-- Чувствительность: что станет с цифрой, если дёрнуть один вход.
+       Человек приходит не за «сколько», а за «что мне поменять». -->
+  <div id="whatif" class="whatif" hidden></div>
+
+  <!-- Валюта — единица отображения: подписи меняются, арифметика нет. -->
+  <div id="currency" class="examples" hidden></div>
+
+  <!-- Поля собираются из product.json:inputs. Разметку генерирует app.js,
+       чтобы поле и его id никогда не расходились с манифестом и кейсами. -->
+  <form id="form" class="card" autocomplete="off"></form>
+
+  <!-- Примеры собираются из product.json:cases — тех же случаев, по которым
+       продукт проверяется. Кейс перестаёт быть только тестом: человек видит,
+       что подставить, и не бросает форму на первом поле. -->
+  <div id="examples" class="examples" hidden></div>
+
+  <div class="actions">
+    <button type="button" id="card" hidden>Показать заказчику</button>
+    <button type="button" id="share" class="ghost" hidden>Скопировать ссылку</button>
+  </div>
+
+  <!-- Текст под калькулятором — то, что индексируется. Без него страница
+       для поиска пустая: у калькулятора нет собственного контента. -->
+  <section class="prose">
+    <h2>Как это считается</h2>
+    <p>PLACEHOLDER объяснение формулы человеческим языком, 2–4 предложения.</p>
+
+    <h2>Частые вопросы</h2>
+    <details><summary>PLACEHOLDER вопрос</summary><p>PLACEHOLDER ответ.</p></details>
+  </section>
+</main>
+
+<footer class="wrap foot">
+  <p>PLACEHOLDER подпись владельца · <a href="./privacy.html">Данные никуда не уходят</a></p>
+</footer>
+
+<script type="module" src="./app.js"></script>
+</body>
+</html>

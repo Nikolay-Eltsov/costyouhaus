@@ -1,0 +1,289 @@
+/* ── Дизайн-система студии ────────────────────────────────────────────────────
+ *
+ * Один файл на все продукты. Каждый продукт рождается с этим видом и не тратит
+ * ни одного шага заказа на оформление — поштучный дизайн на потоке в сотни
+ * продуктов разъезжается уже к третьему.
+ *
+ * Продуктовые решения («что здесь герой», «эти поля вместе», «здесь ползунок»)
+ * приходят из product.json и разыгрываются этими же классами. CSS под продукт
+ * не пишется — если возникло желание, значит решение не выражено в манифесте.
+ */
+
+:root {
+  /* Цвет. Акцент один: он метит результат и то, что можно трогать. */
+  --bg: #faf9f6;
+  --surface: #ffffff;
+  --surface-2: #f2f1ec;
+  --ink: #16191c;
+  --ink-2: #3d454b;
+  --muted: #6b7680;
+  --line: #e4e1d9;
+  --line-strong: #cfcabd;
+  --accent: #0b7a66;
+  --accent-ink: #ffffff;
+  --accent-soft: #e2f1ed;
+  --warn: #8a5a12;
+
+  /* Ритм: одна восьмипиксельная сетка, чтобы отступы не спорили. */
+  --s1: 4px;  --s2: 8px;  --s3: 12px; --s4: 16px;
+  --s5: 24px; --s6: 32px; --s7: 48px; --s8: 64px;
+
+  /* Типографика: шкала, а не произвольные размеры. */
+  --t-hero: clamp(40px, 12vw, 60px);
+  --t-h1: clamp(28px, 6.5vw, 36px);
+  --t-h2: 15px;
+  --t-body: 17px;
+  --t-small: 14px;
+
+  --radius: 12px;
+  --radius-s: 8px;
+  --shadow: 0 1px 2px rgba(22, 25, 28, .04), 0 12px 32px -20px rgba(22, 25, 28, .28);
+  --ring: 0 0 0 3px var(--accent-soft);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0e1211;
+    --surface: #171c1b;
+    --surface-2: #1e2523;
+    --ink: #edf2f0;
+    --ink-2: #c2cecb;
+    --muted: #8b9995;
+    --line: #242c2a;
+    --line-strong: #37423f;
+    --accent: #3fd6b4;
+    --accent-ink: #04211b;
+    --accent-soft: #12312a;
+    --warn: #e0b45f;
+    --shadow: 0 1px 2px rgba(0, 0, 0, .5), 0 12px 32px -20px rgba(0, 0, 0, .9);
+  }
+}
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font: var(--t-body)/1.55 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-feature-settings: "ss01", "cv01";
+}
+
+.wrap { max-width: 660px; margin: 0 auto; padding: var(--s6) var(--s4) var(--s2); }
+
+h1 {
+  font-size: var(--t-h1);
+  line-height: 1.1;
+  letter-spacing: -0.025em;
+  margin: 0 0 var(--s2);
+}
+h2 {
+  font-size: var(--t-h2);
+  text-transform: uppercase;
+  letter-spacing: .07em;
+  font-weight: 600;
+  color: var(--muted);
+  margin: var(--s6) 0 var(--s3);
+}
+.lead { color: var(--muted); margin: 0 0 var(--s5); font-size: var(--t-body); }
+
+/* ── Ввод ─────────────────────────────────────────────────────────────────── */
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: var(--s4);
+  display: grid;
+  gap: var(--s4);
+  box-shadow: var(--shadow);
+}
+
+/* Группа полей: продукт объявляет группы в манифесте, вид даёт их даром. */
+.group { display: grid; gap: var(--s4); }
+.group + .group { padding-top: var(--s4); border-top: 1px solid var(--line); }
+.group-title {
+  font-size: var(--t-small);
+  font-weight: 600;
+  color: var(--ink-2);
+  margin: 0;
+}
+
+label { display: grid; gap: var(--s2); font-size: var(--t-small); color: var(--ink-2); }
+.label-row { display: flex; align-items: baseline; justify-content: space-between; gap: var(--s3); }
+.label-text { flex: 1; }
+
+input[type="number"], input[type="text"], select {
+  font: inherit;
+  color: var(--ink);
+  background: var(--bg);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-s);
+  padding: 12px 13px;
+  min-height: 48px;
+  width: 100%;
+}
+input:focus-visible, select:focus-visible, button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+  box-shadow: var(--ring);
+}
+
+/* Число рядом с ползунком: узкое поле, значение крупно и моноширинно, чтобы
+   не дёргалось при перетаскивании. */
+.slider-row { display: grid; grid-template-columns: 1fr auto; gap: var(--s3); align-items: center; }
+.slider-value {
+  min-width: 4.5em;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  color: var(--ink);
+  font-size: 16px;
+}
+.slider-value .unit { color: var(--muted); font-weight: 400; font-size: var(--t-small); }
+
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 44px;              /* палец, а не пиксельная линия */
+  background: transparent;
+  margin: 0;
+}
+input[type="range"]::-webkit-slider-runnable-track {
+  height: 6px; border-radius: 999px; background: var(--surface-2);
+  border: 1px solid var(--line);
+}
+input[type="range"]::-moz-range-track {
+  height: 6px; border-radius: 999px; background: var(--surface-2);
+  border: 1px solid var(--line);
+}
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none; appearance: none;
+  width: 28px; height: 28px; margin-top: -12px;
+  border-radius: 50%; background: var(--accent);
+  border: 3px solid var(--surface); box-shadow: var(--shadow);
+  cursor: grab;
+}
+input[type="range"]::-moz-range-thumb {
+  width: 28px; height: 28px; border-radius: 50%; background: var(--accent);
+  border: 3px solid var(--surface); box-shadow: var(--shadow); cursor: grab;
+}
+input[type="range"]:active::-webkit-slider-thumb { cursor: grabbing; }
+
+/* ── Результат ────────────────────────────────────────────────────────────── */
+
+/* Результат стоит НАД формой и липнет к верху на узком экране: человек,
+   тянущий ползунок, обязан видеть цифру, которую меняет. Проверено вживую —
+   при форме сверху результат уходит под сгиб, и ползунки теряют смысл. */
+.result {
+  display: block;
+  margin: var(--s4) 0 var(--s5);
+  padding: var(--s5) var(--s4);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--accent);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  font-size: var(--t-small);
+  color: var(--muted);
+}
+.result .hero-label { display: block; color: var(--muted); font-size: var(--t-small); }
+.result .big {
+  display: block;
+  font-size: var(--t-hero);
+  line-height: 1;
+  letter-spacing: -0.03em;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+  margin: var(--s1) 0 0;
+}
+.result .big .unit { font-size: 0.42em; color: var(--muted); letter-spacing: 0; margin-left: .2em; }
+.result .row {
+  display: flex; justify-content: space-between; gap: var(--s3);
+  padding: var(--s2) 0; border-top: 1px solid var(--line);
+  font-variant-numeric: tabular-nums;
+}
+.result .row:first-of-type { margin-top: var(--s4); }
+
+@media (max-width: 700px) {
+  .result {
+    position: sticky;
+    top: var(--s2);
+    z-index: 2;
+    /* Непрозрачный фон обязателен: под липким блоком проезжают поля. */
+    background: var(--surface);
+  }
+}
+.result .row b { color: var(--ink); font-weight: 600; }
+.result.muted { border-left-color: var(--line-strong); }
+.result.muted .big { display: none; }
+
+/* ── «Что если»: чувствительность к каждому входу ──────────────────────────── */
+
+.whatif { margin: var(--s4) 0 0; display: grid; gap: var(--s1); }
+.whatif-title { font-size: var(--t-small); color: var(--muted); margin-bottom: var(--s1); }
+.whatif-row {
+  display: flex; justify-content: space-between; align-items: baseline; gap: var(--s3);
+  padding: var(--s2) var(--s3);
+  border-radius: var(--radius-s);
+  background: var(--surface-2);
+  font-size: var(--t-small);
+  font-variant-numeric: tabular-nums;
+}
+.whatif-row .delta { font-weight: 600; }
+.delta.up { color: var(--accent); }
+.delta.down { color: var(--warn); }
+
+/* ── Действия ─────────────────────────────────────────────────────────────── */
+
+.examples { display: flex; gap: var(--s2); align-items: center; margin: var(--s4) 0 0;
+  overflow-x: auto; padding-bottom: var(--s1); -webkit-overflow-scrolling: touch; }
+.examples-label { color: var(--muted); font-size: var(--t-small); white-space: nowrap; }
+.chip {
+  flex: none; min-height: 40px; padding: 0 var(--s4);
+  font-size: var(--t-small); border-radius: 999px;
+  border: 1px solid var(--line-strong); background: var(--surface); color: var(--ink);
+  white-space: nowrap; cursor: pointer;
+}
+.chip:hover { border-color: var(--accent); color: var(--accent); }
+.chip.on { background: var(--accent-soft); border-color: var(--accent); color: var(--accent); }
+
+/* Пресеты под полем: человек, не знающий своего числа наизусть, закрывает
+   вкладку именно на таком поле. Готовое значение одним нажатием — самый
+   дешёвый способ его удержать. */
+.presets { display: flex; flex-wrap: wrap; gap: var(--s2); margin-top: var(--s1); }
+.preset {
+  min-height: 34px; padding: 0 var(--s3);
+  font-size: 13px; border-radius: 999px;
+  border: 1px dashed var(--line-strong); background: transparent;
+  color: var(--muted); cursor: pointer;
+}
+.preset:hover { border-style: solid; border-color: var(--accent); color: var(--accent); }
+.preset.on { border-style: solid; background: var(--accent-soft); border-color: var(--accent); color: var(--accent); }
+
+.actions { display: flex; flex-wrap: wrap; gap: var(--s2); margin: var(--s4) 0 var(--s2); }
+button {
+  font: inherit; min-height: 48px; padding: 0 var(--s5);
+  border-radius: var(--radius-s); border: 1px solid var(--accent);
+  background: var(--accent); color: var(--accent-ink); cursor: pointer;
+}
+button.ghost { background: transparent; color: var(--accent); }
+button:hover { filter: brightness(1.05); }
+
+/* ── Текст под калькулятором ──────────────────────────────────────────────── */
+
+.prose { color: var(--ink); }
+.prose p { color: var(--ink-2); }
+details { border-top: 1px solid var(--line); padding: var(--s3) 0; }
+summary { cursor: pointer; color: var(--ink); }
+details p { margin: var(--s2) 0 0; }
+.foot { color: var(--muted); font-size: var(--t-small); padding-bottom: var(--s7); }
+a { color: var(--accent); }
+
+/* Движение — только там, где помогает заметить изменение. */
+.result .big, .whatif-row { transition: color .15s ease, background-color .15s ease; }
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+}
